@@ -1,0 +1,13 @@
+export const FONT_SIZE = {
+  FONT_LARGE_TITLE: 32,
+  FONT_TITLE: 24,
+  FONT_SUBTITLE: 20,
+  FONT_BODY: 16,
+  FONT_SMALL_TEXT: 14,
+  FONT_CAPTION: 12,
+  FONT_BUTTON: 16,
+  FONT_OVERLINE: 10,
+  FONT_PLACEHOLDER: 14,
+} as const;
+
+export type FONT_SIZE = keyof typeof FONT_SIZE;

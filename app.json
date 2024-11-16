@@ -6,22 +6,54 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.erexstudio.qrcuisinemobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.erexstudio.qrcuisinemobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin"
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/RethinkSans-Bold.ttf",
+            "./assets/fonts/RethinkSans-ExtraBold.ttf",
+            "./assets/fonts/RethinkSans-Medium.ttf",
+            "./assets/fonts/RethinkSans-Regular.ttf",
+            "./assets/fonts/RethinkSans-SeemiBold.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ],
+      [
+        "react-native-bootsplash",
+        {
+          "assetsDir": "assets/bootsplash"
+        }
+      ],
+      "expo-localization"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ed301be1-d711-4c59-9755-8ea6add06f25"
+      }
     }
   }
 }
