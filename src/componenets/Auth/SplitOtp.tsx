@@ -43,8 +43,7 @@ const SplitOtp = ({ onChange, resetOtp }) => {
                   focusedIndex === index
                     ? COLORS.COLOR_PRIMARY
                     : COLORS.COLOR_BORDER,
-                borderWidth:
-                  focusedIndex === index ? 2 : StyleSheet.hairlineWidth + 0.6,
+                borderWidth: StyleSheet.hairlineWidth + 0.6,
               },
             ]}
             key={index}
@@ -58,6 +57,8 @@ const SplitOtp = ({ onChange, resetOtp }) => {
               ref={inputRefs[index]}
               onFocus={() => setFocusedIndex(index)} // Set focus index
               onBlur={() => setFocusedIndex(null)} // Clear focus index
+              // placeholder="-"
+              placeholderTextColor={COLORS.COLOR_TEXT_SECONDARY}
             />
           </View>
         ))}
@@ -70,11 +71,11 @@ export default SplitOtp;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    width: 50,
-    height: 50,
+    width: 56,
+    height: 48,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
+    borderRadius: 16,
     marginHorizontal: SPACING.SPACING_SM,
   },
   input: {

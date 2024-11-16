@@ -47,7 +47,10 @@ export default function SignUp({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
-        <StatusBar backgroundColor={COLORS.COLOR_BACKGROUND} style="dark" />
+        <StatusBar
+          backgroundColor={isModalVisible ? "rgba(0,0,0,0.5)" : bg}
+          style={isModalVisible ? "light" : "dark"}
+        />
         <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
@@ -65,7 +68,7 @@ export default function SignUp({ navigation }) {
             <Button
               title="signUp.guest_login"
               buttonStyle={{
-                borderRadius: 10,
+                borderRadius: SPACING.SPACING_RADIUS,
                 backgroundColor: COLORS.COLOR_SURFACE,
                 borderWidth: StyleSheet.hairlineWidth + 0.7,
                 borderColor: COLORS.COLOR_BORDER,
@@ -90,9 +93,9 @@ export default function SignUp({ navigation }) {
                 <View style={styles.modalContent}>
                   <View
                     style={{
-                      width: 40,
-                      height: 1,
-                      backgroundColor: COLORS.COLOR_TEXT_SECONDARY,
+                      width: 48,
+                      height: 4,
+                      backgroundColor: COLORS.COLOR_BORDER,
                       alignSelf: "center",
                     }}
                   />
@@ -113,7 +116,7 @@ export default function SignUp({ navigation }) {
                       contentFit="contain"
                     />
                     <TextComponent
-                      preset="body"
+                      preset="subtitle"
                       weight="medium"
                       untranslatedText="Guest Login Limitations"
                       style={{ paddingBottom: SPACING.SPACING_MD }}
@@ -411,12 +414,22 @@ const OrSection = () => {
 const SignInContainer = ({ navigation }) => {
   return (
     <View style={styles.signIn}>
-      <View style={styles.termsAndConditionsTextContainer}>
+      <View
+        style={[
+          styles.termsAndConditionsTextContainer,
+          {
+            flexDirection: "row",
+            alignItems: "center",
+            paddingBottom: SPACING.SPACING_LG,
+          },
+        ]}
+      >
         <TextComponent
           text="signUp.already_have_an_account"
           preset="body"
           style={styles.tq}
           color="COLOR_TEXT_SECONDARY"
+          weight="medium"
         />
         <TextComponent
           onPress={() => {
@@ -505,8 +518,8 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     // position: "absolute",
-    right: SPACING.SPACING_XL, // Adjust based on your layout
-    top: 12,
+    right: SPACING.SPACING_2XL, // Adjust based on your layout
+    top: 14,
   },
 
   modalBackdrop: {
@@ -518,7 +531,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.COLOR_BACKGROUND,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: SPACING.SPACING_LG,
     height: SPACING.SCREEN_HEIGHT / 2, // Half the screen
   },
 });

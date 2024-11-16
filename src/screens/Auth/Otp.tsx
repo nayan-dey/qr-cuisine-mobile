@@ -185,6 +185,7 @@ const HeadingText = () => {
       <TextComponent
         untranslatedText="+1 ******1856"
         preset="body"
+        weight="medium"
         style={[
           styles.subHeading,
           {
@@ -199,22 +200,21 @@ const HeadingText = () => {
 const SignInContainer = () => {
   return (
     <View style={styles.signIn}>
-      <View style={styles.termsAndConditionsTextContainer}>
-        <TextComponent
-          untranslatedText="Don’t receive OTP?"
-          preset="body"
-          style={styles.tq}
-          color="COLOR_TEXT_SECONDARY"
-        />
-        <TextComponent
-          onPress={() => {}}
-          untranslatedText="Resend code"
-          color="COLOR_TEXT_PRIMARY"
-          style={styles.underlined}
-          weight="medium"
-          preset="body"
-        />
-      </View>
+      <TextComponent
+        untranslatedText="Don’t receive OTP?"
+        preset="body"
+        style={styles.tq}
+        color="COLOR_TEXT_SECONDARY"
+        weight="medium"
+      />
+      <TextComponent
+        onPress={() => {}}
+        untranslatedText="Resend code"
+        color="COLOR_TEXT_PRIMARY"
+        style={styles.underlined}
+        weight="medium"
+        preset="body"
+      />
     </View>
   );
 };
@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
   signIn: {
     marginBottom: SPACING.SPACING_LG,
     alignSelf: "center",
+    alignItems: "center",
   },
   termsAndConditionsTextContainer: {
     flexDirection: "row",
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     // position: "absolute",
-    right: SPACING.SPACING_XL, // Adjust based on your layout
-    top: 12,
+    right: SPACING.SPACING_2XL, // Adjust based on your layout
+    top: 14,
   },
 });

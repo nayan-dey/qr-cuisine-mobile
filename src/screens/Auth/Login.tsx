@@ -1,5 +1,7 @@
 import {
   KeyboardAvoidingView,
+  Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
@@ -21,6 +23,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { Eye, EyeSlash, Icon as IconSax } from "iconsax-react-native";
+import { Image } from "expo-image";
 
 export default function SignUp({ navigation }) {
   const bg = COLORS.COLOR_BACKGROUND;
@@ -30,10 +33,23 @@ export default function SignUp({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleGuestLoginPress = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
-        <StatusBar backgroundColor={COLORS.COLOR_BACKGROUND} style="dark" />
+        <StatusBar
+          backgroundColor={isModalVisible ? "rgba(0,0,0,0.5)" : bg}
+          style={isModalVisible ? "light" : "dark"}
+        />
         <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
@@ -49,6 +65,102 @@ export default function SignUp({ navigation }) {
             <TextFileds handleFocus={handleFocus} navigation={navigation} />
             <OrSection />
             <SignInContainer navigation={navigation} />
+            <Button
+              title="signUp.guest_login"
+              onPress={() => {
+                handleGuestLoginPress();
+              }}
+              buttonStyle={{
+                borderRadius: SPACING.SPACING_RADIUS,
+                backgroundColor: COLORS.COLOR_SURFACE,
+                borderWidth: StyleSheet.hairlineWidth + 0.7,
+                borderColor: COLORS.COLOR_BORDER,
+              }}
+              textStyle={{
+                color: COLORS.COLOR_TEXT_MUTED,
+              }}
+            />
+            <Modal
+              visible={isModalVisible}
+              transparent={true}
+              animationType="slide"
+              onRequestClose={closeModal}
+            >
+              <Pressable
+                style={styles.modalBackdrop}
+                onPress={() => {
+                  closeModal();
+                }}
+              >
+                <View style={styles.modalContent}>
+                  <View
+                    style={{
+                      width: 48,
+                      height: 4,
+                      backgroundColor: COLORS.COLOR_BORDER,
+                      alignSelf: "center",
+                    }}
+                  />
+                  <View
+                    style={{
+                      alignSelf: "center",
+                      paddingTop: SPACING.SPACING_3XL,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      source={require("../../../assets/images/ghost.svg")}
+                      style={{
+                        width: SPACING.SCREEN_WIDTH * 0.2,
+                        height: SPACING.SCREEN_WIDTH * 0.2,
+                        marginBottom: SPACING.SPACING_MD,
+                      }}
+                      contentFit="contain"
+                    />
+                    <TextComponent
+                      preset="subtitle"
+                      weight="medium"
+                      untranslatedText="Guest Login Limitations"
+                      style={{ paddingBottom: SPACING.SPACING_MD }}
+                    />
+                    <TextComponent
+                      preset="smallText"
+                      untranslatedText="By logging in as a guest, your orders won’t be saved"
+                    />
+                    <TextComponent
+                      preset="smallText"
+                      untranslatedText="in order history, loyalty points won’t be claimed, and"
+                    />
+                    <TextComponent
+                      preset="smallText"
+                      untranslatedText="you won’t appear on the leaderboard."
+                      style={{ paddingBottom: SPACING.SPACING_MD }}
+                    />
+                    <View
+                      style={{
+                        width: "100%",
+                      }}
+                    ></View>
+                  </View>
+                  <View
+                    style={{
+                      width: "100%",
+                      position: "absolute",
+                      bottom: SPACING.SPACING_LG,
+                      alignSelf: "center",
+                    }}
+                  >
+                    <Button
+                      titleUntranslated="Continue Guest Login"
+                      buttonStyle={{
+                        borderRadius: SPACING.SPACING_RADIUS,
+                      }}
+                      onPress={() => {}}
+                    />
+                  </View>
+                </View>
+              </Pressable>
+            </Modal>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -268,22 +380,6 @@ const OrSection = () => {
           ]}
         />
       </View>
-      <Button
-        title="signUp.guest_login"
-        onPress={() => {}}
-        // loading={isPending}
-        // error={isError}
-
-        buttonStyle={{
-          borderRadius: 10,
-          backgroundColor: COLORS.COLOR_SURFACE,
-          borderWidth: StyleSheet.hairlineWidth + 0.7,
-          borderColor: COLORS.COLOR_BORDER,
-        }}
-        textStyle={{
-          color: COLORS.COLOR_TEXT_MUTED,
-        }}
-      />
     </>
   );
 };
@@ -297,6 +393,7 @@ const SignInContainer = ({ navigation }) => {
           preset="body"
           style={styles.tq}
           color="COLOR_TEXT_SECONDARY"
+          weight="medium"
         />
         <TextComponent
           onPress={() => {
@@ -336,7 +433,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     marginBottom: SPACING.SPACING_LG,
-    marginTop: SPACING.SPACING_SM,
   },
   tq: {
     marginLeft: SPACING.SPACING_XS,
@@ -372,7 +468,6 @@ const styles = StyleSheet.create({
   termsAndConditionsTextContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingLeft: SPACING.SPACING_SM,
   },
   underlined: {
     textDecorationLine: "underline",
@@ -385,7 +480,21 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     // position: "absolute",
-    right: SPACING.SPACING_XL, // Adjust based on your layout
-    top: 12,
+    right: SPACING.SPACING_2XL, // Adjust based on your layout
+    top: 14,
+  },
+
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: COLORS.COLOR_BACKGROUND,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: SPACING.SPACING_LG,
+    height: SPACING.SCREEN_HEIGHT / 2, // Half the screen
   },
 });

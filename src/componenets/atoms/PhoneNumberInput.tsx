@@ -48,6 +48,7 @@ const PhoneNumberInput: React.FC<InputWithLabelProps> = ({
         <Dropdown
           data={countryCodes}
           labelField="label"
+          renderRightIcon={() => null}
           valueField="value"
           value={countryCode}
           onChange={(item) => setCountryCode(item.value)}
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   countryCodeDropdown: {
-    width: 60, // Adjust width as needed
+    width: 50, // Adjust width as needed
     height: SPACING.SPACING_3XL,
     paddingLeft: SPACING.SPACING_MD,
     paddingRight: SPACING.SPACING_XS,

@@ -222,7 +222,7 @@ const $presets = {
   error: [
     $baseStyle,
     $sizeStyles.FONT_BODY,
-    $fontWeightStyles.medium,
+    $fontWeightStyles.regular,
     $colorStyles.TEXT_ERROR,
   ] as StyleProp<TextStyle>,
   success: [

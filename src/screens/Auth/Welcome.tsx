@@ -36,12 +36,12 @@ export default function Login({ navigation }) {
           untranslatedText="And Loyalty "
           preset="title"
           weight="bold"
+          style={{ color: COLORS.COLOR_SECONDARY }}
         >
           <TextComponent
             untranslatedText="Points"
             preset="title"
             weight="bold"
-            style={{ color: COLORS.COLOR_SECONDARY }}
           />
         </TextComponent>
         <TextComponent
@@ -72,12 +72,13 @@ export default function Login({ navigation }) {
         <View style={styles.termsAndConditionsTextContainer}>
           <TextComponent
             text="signUp.already_have_an_account"
-            preset="smallText"
+            preset="body"
             weight="medium"
+            color="COLOR_TEXT_SECONDARY"
           />
           <TextComponent
             text="signUp.sign_in"
-            preset="smallText"
+            preset="body"
             style={styles.underlined}
             weight="medium"
             onPress={() => {

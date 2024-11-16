@@ -200,7 +200,7 @@ const TextFileds = ({
           <>
             <View style={styles.passwordContainer}>
               <InputComponent
-                label="signUp.password_label"
+                label="reset_password.confirm_password_label"
                 placeholder="reset_password.reset_pass_placeholder"
                 value={value}
                 onChangeText={onChange}
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     // position: "absolute",
-    right: SPACING.SPACING_XL, // Adjust based on your layout
-    top: 12,
+    right: SPACING.SPACING_2XL, // Adjust based on your layout
+    top: 14,
   },
 });

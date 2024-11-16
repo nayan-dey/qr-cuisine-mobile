@@ -88,12 +88,16 @@ const screens = [
       </TextComponent>
     ),
     subtitle: (
-      <TextComponent untranslatedText="Pay " preset="title" weight="bold">
+      <TextComponent
+        untranslatedText="Pay "
+        preset="title"
+        weight="bold"
+        style={{ color: COLORS.COLOR_SECONDARY }}
+      >
         <TextComponent
           untranslatedText="Directly In-App"
           preset="title"
           weight="bold"
-          style={{ color: COLORS.COLOR_SECONDARY }}
         />
       </TextComponent>
     ),
@@ -150,7 +154,7 @@ export default function OnBoardingScreen({ navigation }) {
 
   const translateX = scrollValue.interpolate({
     inputRange: [0, width, width * 2],
-    outputRange: [0, 12, 26],
+    outputRange: [0, 13, 27],
   });
 
   const scrollToPage = (index) => {
@@ -310,9 +314,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   activeIndicator: {
-    height: 8,
-    width: 8,
-    borderRadius: 4,
+    height: 9,
+    width: 9,
+    borderRadius: 4.5,
     backgroundColor: COLORS.COLOR_PRIMARY,
     marginHorizontal: 3,
   },

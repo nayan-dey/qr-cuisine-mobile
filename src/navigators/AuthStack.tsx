@@ -36,6 +36,8 @@ const AuthStack = () => {
       screenOptions={{
         headerShown: false,
         navigationBarColor: background,
+        animationTypeForReplace: "push",
+        animation: "simple_push",
       }}
     >
       {!isOnboardingCompleted && (
@@ -52,19 +54,5 @@ const AuthStack = () => {
 };
 
 export const AuthNavigator = () => {
-  useEffect(() => {
-    const onBackPress = () => {
-      const currentRoute = navigationRef.current?.getCurrentRoute()?.name;
-      if (currentRoute && "Demo") {
-        BackHandler.exitApp();
-        return true;
-      }
-      return false;
-    };
-    BackHandler.addEventListener("hardwareBackPress", onBackPress);
-    return () =>
-      BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-  }, []);
-
   return <AuthStack />;
 };
