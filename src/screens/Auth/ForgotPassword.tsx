@@ -163,7 +163,7 @@ const TextFileds = ({
           </>
         )}
       />
-      <SignInContainer />
+      <SignInContainer navigation={navigation} />
       <Button
         titleUntranslated="Send OTP Code"
         // onPress={handleSubmit(registerSubmit)}
@@ -202,7 +202,7 @@ const HeadingText = () => {
   );
 };
 
-const SignInContainer = () => {
+const SignInContainer = ({ navigation }) => {
   return (
     <View style={styles.signIn}>
       <TextComponent
@@ -213,7 +213,9 @@ const SignInContainer = () => {
         weight="medium"
       />
       <TextComponent
-        onPress={() => {}}
+        onPress={() => {
+          navigation.navigate("Login");
+        }}
         text="login.sign_in"
         color="COLOR_TEXT_PRIMARY"
         style={styles.underlined}

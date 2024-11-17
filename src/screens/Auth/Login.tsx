@@ -1,7 +1,5 @@
 import {
   KeyboardAvoidingView,
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   View,
@@ -11,19 +9,18 @@ import { useForm, Controller } from "react-hook-form";
 import { COLORS } from "~/constants/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import { TextComponent } from "~/componenets/atoms/TextComponent";
-import AnimatedCheckbox from "~/componenets/atoms/AnimatedCheckbox";
 import Button from "~/componenets/atoms/AnimatedButton";
 import { SPACING } from "~/constants/Spacing";
 import InputComponent from "~/componenets/atoms/inputComponent";
 import { StatusBar } from "expo-status-bar";
-import { Icon } from "~/componenets/atoms/Icon";
 import PhoneNumberInput from "~/componenets/atoms/PhoneNumberInput";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { Eye, EyeSlash, Icon as IconSax } from "iconsax-react-native";
+import { Eye, EyeSlash } from "iconsax-react-native";
 import { Image } from "expo-image";
+import { BottomSheet, BottomSheetRef } from "react-native-sheet";
 
 export default function SignUp({ navigation }) {
   const bg = COLORS.COLOR_BACKGROUND;
@@ -33,22 +30,15 @@ export default function SignUp({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const handleGuestLoginPress = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  const bottomSheet = useRef<BottomSheetRef>(null);
+  const [isSheetOpen, setSheetOpen] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
         <StatusBar
-          backgroundColor={isModalVisible ? "rgba(0,0,0,0.5)" : bg}
-          style={isModalVisible ? "light" : "dark"}
+          backgroundColor={isSheetOpen ? "rgba(0,0,0,0.5)" : bg}
+          style={"dark"}
         />
         <ScrollView
           ref={scrollViewRef}
@@ -63,104 +53,89 @@ export default function SignUp({ navigation }) {
           <View style={styles.container}>
             <HeadingText />
             <TextFileds handleFocus={handleFocus} navigation={navigation} />
-            <OrSection />
+            <OrSection setSheetOpen={setSheetOpen} bottomSheet={bottomSheet} />
             <SignInContainer navigation={navigation} />
-            <Button
-              title="signUp.guest_login"
-              onPress={() => {
-                handleGuestLoginPress();
+            <BottomSheet
+              draggable={true}
+              height={SPACING.SCREEN_HEIGHT / 2}
+              ref={bottomSheet}
+              sheetBackgroundColor={"red"}
+              sheetStyle={{
+                backgroundColor: COLORS.COLOR_BACKGROUND,
+                borderTopRightRadius: 24,
+                borderTopLeftRadius: 24,
               }}
-              buttonStyle={{
+              onCloseFinish={() => {
+                setSheetOpen(false);
+              }}
+              dragIconColor={COLORS.COLOR_BORDER}
+              dragIconStyle={{
+                width: 48,
+                height: 4,
                 borderRadius: SPACING.SPACING_RADIUS,
-                backgroundColor: COLORS.COLOR_SURFACE,
-                borderWidth: StyleSheet.hairlineWidth + 0.7,
-                borderColor: COLORS.COLOR_BORDER,
+                backgroundColor: COLORS.COLOR_BORDER,
               }}
-              textStyle={{
-                color: COLORS.COLOR_TEXT_MUTED,
-              }}
-            />
-            <Modal
-              visible={isModalVisible}
-              transparent={true}
-              animationType="slide"
-              onRequestClose={closeModal}
             >
-              <Pressable
-                style={styles.modalBackdrop}
-                onPress={() => {
-                  closeModal();
-                }}
-              >
-                <View style={styles.modalContent}>
-                  <View
+              <View style={styles.modalContent}>
+                <View
+                  style={{
+                    alignSelf: "center",
+                    paddingTop: SPACING.SPACING_3XL,
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    source={require("../../../assets/images/ghost.svg")}
                     style={{
-                      width: 48,
-                      height: 4,
-                      backgroundColor: COLORS.COLOR_BORDER,
-                      alignSelf: "center",
+                      width: SPACING.SCREEN_WIDTH * 0.2,
+                      height: SPACING.SCREEN_WIDTH * 0.2,
+                      marginBottom: SPACING.SPACING_MD,
                     }}
+                    contentFit="contain"
+                  />
+                  <TextComponent
+                    preset="subtitle"
+                    weight="medium"
+                    untranslatedText="Guest Login Limitations"
+                    style={{ paddingBottom: SPACING.SPACING_MD }}
+                  />
+                  <TextComponent
+                    preset="smallText"
+                    untranslatedText="By logging in as a guest, your orders won’t be saved"
+                  />
+                  <TextComponent
+                    preset="smallText"
+                    untranslatedText="in order history, loyalty points won’t be claimed, and"
+                  />
+                  <TextComponent
+                    preset="smallText"
+                    untranslatedText="you won’t appear on the leaderboard."
+                    style={{ paddingBottom: SPACING.SPACING_MD }}
                   />
                   <View
                     style={{
-                      alignSelf: "center",
-                      paddingTop: SPACING.SPACING_3XL,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Image
-                      source={require("../../../assets/images/ghost.svg")}
-                      style={{
-                        width: SPACING.SCREEN_WIDTH * 0.2,
-                        height: SPACING.SCREEN_WIDTH * 0.2,
-                        marginBottom: SPACING.SPACING_MD,
-                      }}
-                      contentFit="contain"
-                    />
-                    <TextComponent
-                      preset="subtitle"
-                      weight="medium"
-                      untranslatedText="Guest Login Limitations"
-                      style={{ paddingBottom: SPACING.SPACING_MD }}
-                    />
-                    <TextComponent
-                      preset="smallText"
-                      untranslatedText="By logging in as a guest, your orders won’t be saved"
-                    />
-                    <TextComponent
-                      preset="smallText"
-                      untranslatedText="in order history, loyalty points won’t be claimed, and"
-                    />
-                    <TextComponent
-                      preset="smallText"
-                      untranslatedText="you won’t appear on the leaderboard."
-                      style={{ paddingBottom: SPACING.SPACING_MD }}
-                    />
-                    <View
-                      style={{
-                        width: "100%",
-                      }}
-                    ></View>
-                  </View>
-                  <View
-                    style={{
                       width: "100%",
-                      position: "absolute",
-                      bottom: SPACING.SPACING_LG,
-                      alignSelf: "center",
                     }}
-                  >
-                    <Button
-                      titleUntranslated="Continue Guest Login"
-                      buttonStyle={{
-                        borderRadius: SPACING.SPACING_RADIUS,
-                      }}
-                      onPress={() => {}}
-                    />
-                  </View>
+                  ></View>
                 </View>
-              </Pressable>
-            </Modal>
+                <View
+                  style={{
+                    width: "100%",
+                    position: "absolute",
+                    bottom: SPACING.SPACING_LG,
+                    alignSelf: "center",
+                  }}
+                >
+                  <Button
+                    titleUntranslated="Continue Guest Login"
+                    buttonStyle={{
+                      borderRadius: SPACING.SPACING_RADIUS,
+                    }}
+                    onPress={() => {}}
+                  />
+                </View>
+              </View>
+            </BottomSheet>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -352,7 +327,7 @@ const HeadingText = () => {
   );
 };
 
-const OrSection = () => {
+const OrSection = ({ setSheetOpen, bottomSheet }) => {
   const borderColor = COLORS.COLOR_BORDER;
   return (
     <>
@@ -380,6 +355,22 @@ const OrSection = () => {
           ]}
         />
       </View>
+      <Button
+        title="signUp.guest_login"
+        onPress={() => {
+          setSheetOpen(true);
+          bottomSheet.current?.show();
+        }}
+        buttonStyle={{
+          borderRadius: SPACING.SPACING_RADIUS,
+          backgroundColor: COLORS.COLOR_SURFACE,
+          borderWidth: StyleSheet.hairlineWidth + 0.7,
+          borderColor: COLORS.COLOR_BORDER,
+        }}
+        textStyle={{
+          color: COLORS.COLOR_TEXT_MUTED,
+        }}
+      />
     </>
   );
 };

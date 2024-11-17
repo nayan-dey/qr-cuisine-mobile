@@ -12,7 +12,7 @@ export default function AnimatedBootSplash({ onAnimationEnd }: Props) {
   const { container, logo /*, brand */ } = BootSplash.useHideAnimation({
     manifest: require("../../assets/bootsplash/manifest.json"),
 
-    logo: require("../../assets/bootsplash/logo.png"),
+    logo: require("../../assets/appicon.png"),
     // darkLogo: require("../assets/bootsplash/dark-logo.png"),
     // brand: require("../assets/bootsplash/brand.png"),
     // darkBrand: require("../assets/bootsplash/dark-brand.png"),
@@ -33,8 +33,8 @@ export default function AnimatedBootSplash({ onAnimationEnd }: Props) {
   });
 
   return (
-    <Animated.View {...container} style={[container.style, { opacity }]}>
-      <Image {...logo} style={{ width: 200, height: 200 }} />
+    <Animated.View {...container} style={[container.style]}>
+      <Image {...logo} style={{ width: 60, height: 60 }} />
     </Animated.View>
   );
 }

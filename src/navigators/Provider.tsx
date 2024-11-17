@@ -28,8 +28,9 @@ export default function Provider() {
     return (
       <AnimatedBootSplash
         onAnimationEnd={() => {
-          console.log("animation finished");
-          setSplashVisible(false);
+          setTimeout(() => {
+            setSplashVisible(false);
+          }, 1500);
         }}
       />
     );
