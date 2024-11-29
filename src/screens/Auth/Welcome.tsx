@@ -7,6 +7,7 @@ import { TextComponent } from "~/componenets/atoms/TextComponent";
 import Button from "~/componenets/atoms/AnimatedButton";
 import { FONT_SIZE } from "~/constants/FontSize";
 import { StatusBar } from "expo-status-bar";
+import { Screen } from "~/componenets/atoms/Screen";
 
 export default function Login({ navigation }) {
   return (
@@ -55,6 +56,7 @@ export default function Login({ navigation }) {
           preset="body"
           color="COLOR_TEXT_SECONDARY"
         />
+
         <Button
           containerStyle={{
             width: "100%",

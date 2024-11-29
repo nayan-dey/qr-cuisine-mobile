@@ -8,7 +8,7 @@ import {
 import React, { useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { COLORS } from "~/constants/Colors";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { TextComponent } from "~/componenets/atoms/TextComponent";
 import AnimatedCheckbox from "~/componenets/atoms/AnimatedCheckbox";
 import Button from "~/componenets/atoms/AnimatedButton";
@@ -32,8 +32,10 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useResetPassword } from "~/services/auth";
 
 export default function NewPassword({ navigation }) {
+  const { mobile } = useRoute().params;
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => {
@@ -62,7 +64,10 @@ export default function NewPassword({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        // behavior={"padding"}
+        style={{ flex: 1 }}
+      >
         <StatusBar backgroundColor={COLORS.COLOR_BACKGROUND} style="dark" />
         <ScrollView
           ref={scrollViewRef}
@@ -77,7 +82,7 @@ export default function NewPassword({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.navigate("ForgotPassword")}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
@@ -86,7 +91,11 @@ export default function NewPassword({ navigation }) {
               </Pressable>
             </Animated.View>
             <HeadingText />
-            <TextFileds handleFocus={handleFocus} navigation={navigation} />
+            <TextFileds
+              handleFocus={handleFocus}
+              navigation={navigation}
+              mobile={mobile}
+            />
             {/* <SignInContainer /> */}
           </View>
         </ScrollView>
@@ -97,17 +106,21 @@ export default function NewPassword({ navigation }) {
 
 const TextFileds = ({
   navigation,
+  mobile,
 }: {
   handleFocus: () => void;
   navigation: any;
+  mobile: string;
 }) => {
   const initialValues = {
-    confirmPass: "",
     password: "",
+    confirmPass: "",
   };
   const {
     control,
     reset,
+    handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm();
   useFocusEffect(
@@ -115,10 +128,17 @@ const TextFileds = ({
       return () => reset(initialValues);
     }, [reset])
   );
+  const { mutateAsync: resetPassword, isPending } = useResetPassword();
   const registerSubmit = async (values: typeof initialValues) => {
-    console.log("Values", values);
+    try {
+      const response = await resetPassword({
+        mobile: mobile,
+        password: values.password,
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
-
   const [showPassword, setShowPassword] = useState(false);
   const [confirm, setConfirm] = useState(false);
 
@@ -130,8 +150,7 @@ const TextFileds = ({
         rules={{
           required: "signUp.password_validate",
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^\S+$/,
             message: "signUp.password_without_space",
           },
           minLength: {
@@ -186,15 +205,8 @@ const TextFileds = ({
         name="confirmPass"
         rules={{
           required: "reset_password.confirm_password_label",
-          pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-            message: "signUp.password_without_space",
-          },
-          minLength: {
-            value: 8,
-            message: "signUp.invaid_password",
-          },
+          validate: (value) =>
+            value === getValues("password") || "reset_password.pass_not_match",
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <>
@@ -226,12 +238,12 @@ const TextFileds = ({
               </View>
             </View>
             <View style={{ minHeight: 20 }}>
-              {errors.password && (
+              {errors.confirmPass && (
                 <TextComponent
                   style={styles.error}
                   preset="error"
                   size="FONT_SMALL_TEXT"
-                  text={errors.password.message}
+                  text={errors.confirmPass.message}
                 />
               )}
             </View>
@@ -241,13 +253,12 @@ const TextFileds = ({
       {/* <SignInContainer /> */}
       <Button
         titleUntranslated="Create New Password"
-        // onPress={handleSubmit(registerSubmit)}
-        onPress={() => {
-          // navigation.navigate("Otp");
-        }}
+        onPress={handleSubmit(registerSubmit)}
         buttonStyle={{
           borderRadius: SPACING.SPACING_RADIUS,
+          marginTop: SPACING.SPACING_MD,
         }}
+        loading={isPending}
       />
     </View>
   );

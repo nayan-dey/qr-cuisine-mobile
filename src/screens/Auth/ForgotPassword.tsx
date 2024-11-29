@@ -5,34 +5,29 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { COLORS } from "~/constants/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import { TextComponent } from "~/componenets/atoms/TextComponent";
-import AnimatedCheckbox from "~/componenets/atoms/AnimatedCheckbox";
 import Button from "~/componenets/atoms/AnimatedButton";
 import { SPACING } from "~/constants/Spacing";
-import InputComponent from "~/componenets/atoms/inputComponent";
 import { StatusBar } from "expo-status-bar";
-import { Icon } from "~/componenets/atoms/Icon";
 import PhoneNumberInput from "~/componenets/atoms/PhoneNumberInput";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import {
-  ArrowLeft,
-  Eye,
-  EyeSlash,
-  Icon as IconSax,
-} from "iconsax-react-native";
+import { ArrowLeft, Icon as IconSax } from "iconsax-react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useForgotPassword } from "~/services/auth";
+import Toast from "react-native-toast-message";
 
+const countryCode = process.env.EXPO_PUBLIC_COUNTRY_CODE;
 export default function ForgotPassword({ navigation }) {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
@@ -62,7 +57,10 @@ export default function ForgotPassword({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        // behavior={"padding"}
+        style={{ flex: 1 }}
+      >
         <StatusBar backgroundColor={COLORS.COLOR_BACKGROUND} style="dark" />
         <ScrollView
           ref={scrollViewRef}
@@ -96,15 +94,14 @@ export default function ForgotPassword({ navigation }) {
 }
 
 const TextFileds = ({
-  handleFocus,
   navigation,
 }: {
   handleFocus: () => void;
   navigation: any;
 }) => {
+  const { mutateAsync: forgotPass, isPending } = useForgotPassword();
   const initialValues = {
-    email: "",
-    password: "",
+    phone: "",
   };
   const {
     control,
@@ -118,7 +115,29 @@ const TextFileds = ({
     }, [reset])
   );
   const registerSubmit = async (values: typeof initialValues) => {
-    console.log("Values", values);
+    // const fullMobileWithCountryCode = `${countryCode} ${values.phone}`;
+
+    // navigation.navigate("Otp", {
+    //   mobile: fullMobileWithCountryCode,
+    // });
+
+    //DO THIS ON PRODDDD
+
+    const fullMobileWithCountryCode = `${countryCode} ${values.phone}`;
+    try {
+      const response = await forgotPass(fullMobileWithCountryCode);
+      console.log("response", response);
+      if (response.message === "OTP sent successfully") {
+        navigation.navigate("Otp", {
+          mobile: fullMobileWithCountryCode,
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: error.message,
+      });
+    }
   };
 
   return (
@@ -134,7 +153,7 @@ const TextFileds = ({
             message: "signUp.invalid_phone_number",
           },
           minLength: {
-            value: 8,
+            value: 10,
             message: "signUp.phone_validate",
           },
         }}
@@ -149,6 +168,7 @@ const TextFileds = ({
               isError={!!errors.phone}
               keyboardType="numeric"
               maxLength={10}
+              autoFocus={true}
             />
             <View style={{ minHeight: 20 }}>
               {errors.phone && (
@@ -166,13 +186,14 @@ const TextFileds = ({
       <SignInContainer navigation={navigation} />
       <Button
         titleUntranslated="Send OTP Code"
-        // onPress={handleSubmit(registerSubmit)}
-        onPress={() => {
-          navigation.navigate("Otp");
-        }}
+        onPress={handleSubmit(registerSubmit)}
+        // onPress={() => {
+        //   navigation.navigate("Otp");
+        // }}
         buttonStyle={{
           borderRadius: SPACING.SPACING_RADIUS,
         }}
+        loading={isPending}
       />
     </View>
   );

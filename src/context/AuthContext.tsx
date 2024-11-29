@@ -35,8 +35,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (obj) => {
     setIsLoading(true); // Start loading
-    const { token } = obj;
-    if (token) {
+    const { user_id } = obj;
+    if (user_id) {
       setUserData(obj);
       setUser(JSON.stringify(obj));
       await AsyncStorage.setItem("@auth", JSON.stringify(obj));

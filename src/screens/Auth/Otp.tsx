@@ -5,10 +5,10 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { COLORS } from "~/constants/Colors";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { TextComponent } from "~/componenets/atoms/TextComponent";
 import AnimatedCheckbox from "~/componenets/atoms/AnimatedCheckbox";
 import Button from "~/componenets/atoms/AnimatedButton";
@@ -33,8 +33,12 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import SplitOtp from "~/componenets/Auth/SplitOtp";
+import { useForgotPassword, useVarifyOtp } from "~/services/auth";
+import Toast from "react-native-toast-message";
 
+const countryCode = process.env.EXPO_PUBLIC_COUNTRY_CODE;
 export default function Otp({ navigation }) {
+  const { mobile } = useRoute().params;
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => {
@@ -43,27 +47,25 @@ export default function Otp({ navigation }) {
       opacity: opacity.value,
     };
   });
-
   const onPressIn = () => {
     scale.value = withTiming(0.98, { duration: 50 });
     opacity.value = withTiming(0.8, { duration: 50 });
   };
-
   const onPressOut = () => {
     scale.value = withTiming(1, { duration: 50 });
     opacity.value = withTiming(1, { duration: 50 });
   };
-
   const bg = COLORS.COLOR_BACKGROUND;
   const { top } = useSafeAreaInsets();
   const scrollViewRef = useRef<ScrollView>(null);
   const handleFocus = () => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
+  const lastFourVisible = `${countryCode} ******${mobile.slice(-4)}`;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }}>
         <StatusBar backgroundColor={COLORS.COLOR_BACKGROUND} style="dark" />
         <ScrollView
           ref={scrollViewRef}
@@ -78,7 +80,7 @@ export default function Otp({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.navigate("ForgotPassword")}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
@@ -86,8 +88,12 @@ export default function Otp({ navigation }) {
                 <ArrowLeft size={18} color={COLORS.COLOR_TEXT_MUTED} />
               </Pressable>
             </Animated.View>
-            <HeadingText />
-            <TextFileds handleFocus={handleFocus} navigation={navigation} />
+            <HeadingText lastFourVisible={lastFourVisible} />
+            <TextFileds
+              handleFocus={handleFocus}
+              navigation={navigation}
+              mobileNumber={mobile}
+            />
             {/* <SignInContainer /> */}
           </View>
         </ScrollView>
@@ -99,13 +105,14 @@ export default function Otp({ navigation }) {
 const TextFileds = ({
   handleFocus,
   navigation,
+  mobileNumber,
 }: {
   handleFocus: () => void;
   navigation: any;
+  mobileNumber: string;
 }) => {
   const initialValues = {
-    email: "",
-    password: "",
+    otp: "",
   };
   const {
     control,
@@ -118,8 +125,29 @@ const TextFileds = ({
       return () => reset(initialValues);
     }, [reset])
   );
+  const { mutateAsync: verifyOtp, isPending } = useVarifyOtp();
+
   const registerSubmit = async (values: typeof initialValues) => {
-    console.log("Values", values);
+    // navigation.navigate("NewPassword", { mobile: mobileNumber });
+
+    // DO THIS ON PRODDDD
+
+    try {
+      const response = await verifyOtp({
+        mobile: mobileNumber,
+        otp: values.otp,
+      });
+      console.log("response", response);
+      if (response.message === "OTP verified successfully.") {
+        navigation.navigate("NewPassword", { mobile: mobileNumber });
+      }
+    } catch (error) {
+      console.log("first", error);
+      Toast.show({
+        type: "error",
+        text1: "Wrong OTP Entered",
+      });
+    }
   };
 
   return (
@@ -143,32 +171,37 @@ const TextFileds = ({
               resetOtp={false}
               isError={!!errors.otp}
             />
-            {fieldState.error && (
-              <TextComponent
-                style={styles.error}
-                preset="error"
-                text={fieldState.error.message}
-              />
-            )}
+            <View style={{ minHeight: 20 }}>
+              {fieldState.error && (
+                <TextComponent
+                  style={[
+                    styles.error,
+                    {
+                      alignSelf: "center",
+                    },
+                  ]}
+                  preset="error"
+                  text={fieldState.error.message}
+                />
+              )}
+            </View>
           </>
         )}
       />
-      <SignInContainer />
+      <SignInContainer mobile={mobileNumber} />
       <Button
         titleUntranslated="Verify"
-        // onPress={handleSubmit(registerSubmit)}
-        onPress={() => {
-          navigation.navigate("NewPassword");
-        }}
+        onPress={handleSubmit(registerSubmit)}
         buttonStyle={{
           borderRadius: SPACING.SPACING_RADIUS,
         }}
+        loading={isPending}
       />
     </View>
   );
 };
 
-const HeadingText = () => {
+const HeadingText = ({ lastFourVisible }) => {
   return (
     <View style={styles.HeadingContainer}>
       <TextComponent
@@ -183,7 +216,7 @@ const HeadingText = () => {
         color="COLOR_TEXT_SECONDARY"
       />
       <TextComponent
-        untranslatedText="+1 ******1856"
+        untranslatedText={lastFourVisible}
         preset="body"
         weight="medium"
         style={[
@@ -197,7 +230,47 @@ const HeadingText = () => {
   );
 };
 
-const SignInContainer = () => {
+const SignInContainer = ({ mobile }) => {
+  const fullMobileWithCountryCode = mobile;
+  const { mutateAsync: forgotPass, isPending } = useForgotPassword();
+
+  const [isResendCode, setIsResendCode] = useState(false);
+  const [timer, setTimer] = useState(60); // Countdown timer
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // State to show "OTP sent successfully"
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval); // Cleanup on unmount
+    } else {
+      setIsResendCode(true); // Enable Resend button
+    }
+  }, [timer]);
+
+  const HandleResendCode = async () => {
+    // setTimer(60); // Reset timer
+    // setIsResendCode(false); // Disable Resend button
+    // setShowSuccessMessage(true);
+
+    // DO THIS ON PRODDDD
+
+    try {
+      const response = await forgotPass(fullMobileWithCountryCode);
+      if (response.message === "OTP sent successfully") {
+        setTimer(60); // Reset timer
+        setIsResendCode(false); // Disable Resend button
+        setShowSuccessMessage(true); // Show success message
+        // setTimeout(() => setShowSuccessMessage(false), 3000); // Hide success message after 3 seconds
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: error.message || "Failed to resend OTP",
+      });
+    }
+  };
   return (
     <View style={styles.signIn}>
       <TextComponent
@@ -207,14 +280,31 @@ const SignInContainer = () => {
         color="COLOR_TEXT_SECONDARY"
         weight="medium"
       />
-      <TextComponent
-        onPress={() => {}}
-        untranslatedText="Resend code"
-        color="COLOR_TEXT_PRIMARY"
-        style={styles.underlined}
-        weight="medium"
-        preset="body"
-      />
+      {showSuccessMessage ? (
+        <TextComponent
+          untranslatedText="OTP sent successfully"
+          weight="medium"
+          preset="body"
+          style={{ color: COLORS.COLOR_PRIMARY }}
+        />
+      ) : isResendCode ? (
+        <TextComponent
+          onPress={HandleResendCode}
+          untranslatedText="Resend code"
+          color="COLOR_TEXT_PRIMARY"
+          style={styles.underlined}
+          weight="medium"
+          preset="body"
+        />
+      ) : (
+        <TextComponent
+          untranslatedText={`Resend in ${timer}s`}
+          color="COLOR_TEXT_SECONDARY"
+          style={styles.timer}
+          weight="medium"
+          preset="body"
+        />
+      )}
     </View>
   );
 };
@@ -243,47 +333,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-  inputContainer: {
-    // flex: 0.5,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    marginBottom: SPACING.SPACING_LG,
-    marginTop: SPACING.SPACING_SM,
-  },
+  inputContainer: {},
+
   tq: {
     marginLeft: SPACING.SPACING_XS,
   },
-  orContainer: {
-    marginVertical: SPACING.SPACING_MD,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  orStick: {
-    borderWidth: StyleSheet.hairlineWidth + 0.3,
-    width: 60,
-    marginHorizontal: SPACING.SPACING_SM,
-  },
-  iconContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   iconStyle: {
     height: 32,
     width: 32,
   },
   error: {
     minHeight: 20,
+    marginTop: -15,
   },
   signIn: {
     marginBottom: SPACING.SPACING_LG,
     alignSelf: "center",
     alignItems: "center",
+    // backgroundColor: "red",
+    marginTop: -10,
   },
   termsAndConditionsTextContainer: {
     flexDirection: "row",
@@ -303,5 +372,8 @@ const styles = StyleSheet.create({
     // position: "absolute",
     right: SPACING.SPACING_2XL, // Adjust based on your layout
     top: 14,
+  },
+  timer: {
+    color: COLORS.COLOR_PRIMARY,
   },
 });

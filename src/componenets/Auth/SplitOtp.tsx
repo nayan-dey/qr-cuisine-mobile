@@ -49,6 +49,7 @@ const SplitOtp = ({ onChange, resetOtp }) => {
             key={index}
           >
             <TextInput
+              autoComplete="sms-otp"
               style={styles.input}
               value={digit}
               onChangeText={(text) => handleInputChange(text, index)}

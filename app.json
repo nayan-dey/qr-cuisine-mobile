@@ -1,26 +1,33 @@
 {
   "expo": {
-    "name": "QR Cuisine",
+    "name": "QRCuisine",
     "slug": "qr-cuisine-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appicon.png",
+    "icon": "./assets/applogo.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.erexstudio.qrcuisinemobile"
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/appicon.png",
-        "backgroundColor": "#fff"
+        "foregroundImage": "./assets/applogo.png",
+        "backgroundColor": "#666666"
+      },
+      "config": {
+        "googleMaps": {
+          // "apiKey": "AIzaSyCcvPx5lFY16kjOYYsFCMeXiGLIFumoNHE"
+          "apiKey": "AIzaSyDbxdM_pA81YqlheJSleL2wG2-5-64j9NQ"
+        }
       },
       "package": "com.erexstudio.qrcuisinemobile"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
+
     "plugins": [
+      ["./translucent-default-splash-screen-config"],
+      ["expo-location"],
       ["@react-native-google-signin/google-signin"],
       [
         "expo-font",
@@ -30,7 +37,7 @@
             "./assets/fonts/RethinkSans-ExtraBold.ttf",
             "./assets/fonts/RethinkSans-Medium.ttf",
             "./assets/fonts/RethinkSans-Regular.ttf",
-            "./assets/fonts/RethinkSans-SeemiBold.ttf"
+            "./assets/fonts/RethinkSans-SemiBold.ttf"
           ]
         }
       ],

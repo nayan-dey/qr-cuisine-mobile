@@ -20,7 +20,15 @@ import {
 } from "react-native-safe-area-context";
 import { Eye, EyeSlash } from "iconsax-react-native";
 import { Image } from "expo-image";
-import { BottomSheet, BottomSheetRef } from "react-native-sheet";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import { useLogin } from "~/services/auth";
+import * as Crypto from "expo-crypto";
+import { useAuth } from "~/context/AuthContext";
+import Toast from "react-native-toast-message";
+import * as Device from "expo-device";
+
+const countryCode = process.env.EXPO_PUBLIC_COUNTRY_CODE;
+const cryptoSecret = process.env.EXPO_PUBLIC_CRYPTO_SECRET;
 
 export default function SignUp({ navigation }) {
   const bg = COLORS.COLOR_BACKGROUND;
@@ -30,14 +38,17 @@ export default function SignUp({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  const bottomSheet = useRef<BottomSheetRef>(null);
+  const actionSheetRef = useRef<ActionSheetRef>(null);
   const [isSheetOpen, setSheetOpen] = useState(false);
-
+  const { login } = useAuth();
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        //  behavior={"padding"}
+        style={{ flex: 1 }}
+      >
         <StatusBar
-          backgroundColor={isSheetOpen ? "rgba(0,0,0,0.5)" : bg}
+          backgroundColor={isSheetOpen ? "rgba(0,0,0,0.0)" : bg}
           style={"dark"}
         />
         <ScrollView
@@ -53,27 +64,25 @@ export default function SignUp({ navigation }) {
           <View style={styles.container}>
             <HeadingText />
             <TextFileds handleFocus={handleFocus} navigation={navigation} />
-            <OrSection setSheetOpen={setSheetOpen} bottomSheet={bottomSheet} />
+            <OrSection
+              setSheetOpen={setSheetOpen}
+              bottomSheet={actionSheetRef}
+            />
             <SignInContainer navigation={navigation} />
-            <BottomSheet
-              draggable={true}
-              height={SPACING.SCREEN_HEIGHT / 2}
-              ref={bottomSheet}
-              sheetBackgroundColor={"red"}
-              sheetStyle={{
+            <ActionSheet
+              ref={actionSheetRef}
+              gestureEnabled
+              onClose={() => setSheetOpen(false)}
+              containerStyle={{
                 backgroundColor: COLORS.COLOR_BACKGROUND,
                 borderTopRightRadius: 24,
                 borderTopLeftRadius: 24,
               }}
-              onCloseFinish={() => {
-                setSheetOpen(false);
-              }}
-              dragIconColor={COLORS.COLOR_BORDER}
-              dragIconStyle={{
+              indicatorStyle={{
                 width: 48,
                 height: 4,
-                borderRadius: SPACING.SPACING_RADIUS,
-                backgroundColor: COLORS.COLOR_BORDER,
+                backgroundColor: COLORS.COLOR_BORDER, // Custom color
+                borderRadius: 3,
               }}
             >
               <View style={styles.modalContent}>
@@ -131,11 +140,18 @@ export default function SignUp({ navigation }) {
                     buttonStyle={{
                       borderRadius: SPACING.SPACING_RADIUS,
                     }}
-                    onPress={() => {}}
+                    onPress={async () => {
+                      const hash = await Crypto.digestStringAsync(
+                        Crypto.CryptoDigestAlgorithm.SHA256,
+                        `${Device.manufacturer}:${Device.modelName}:${cryptoSecret}`,
+                        { encoding: Crypto.CryptoEncoding.HEX }
+                      );
+                      login({ user_id: hash });
+                    }}
                   />
                 </View>
               </View>
-            </BottomSheet>
+            </ActionSheet>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -150,10 +166,11 @@ const TextFileds = ({
   handleFocus: () => void;
   navigation: any;
 }) => {
+  const { login } = useAuth();
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
-    email: "",
+    mobile: "",
     password: "",
   };
   const {
@@ -162,20 +179,50 @@ const TextFileds = ({
     reset,
     formState: { errors },
   } = useForm();
+
+  const { mutate: loginUser, isPending } = useLogin();
+
   useFocusEffect(
     React.useCallback(() => {
       return () => reset(initialValues);
     }, [reset])
   );
   const registerSubmit = async (values: typeof initialValues) => {
-    console.log("Values", values);
+    try {
+      // Triggering mutation
+      loginUser(values, {
+        onSuccess: async (data) => {
+          console.log("Registration successful!", data);
+          if (data[0]?.user_id === null) {
+            Toast.show({
+              type: "error",
+              text1: "Invalid Credentials",
+            });
+            return;
+          } else {
+            const hash = await Crypto.digestStringAsync(
+              Crypto.CryptoDigestAlgorithm.SHA256,
+              `${data[0]?.user_id}:${cryptoSecret}`,
+              { encoding: Crypto.CryptoEncoding.HEX }
+            );
+            login({ user_id: hash });
+            reset(initialValues);
+          }
+        },
+        onError: (error: any) => {
+          alert(`Error: ${error.message}`);
+        },
+      });
+    } catch (err) {
+      console.error("Error in registration:", err);
+    }
   };
 
   return (
     <View style={styles.inputContainer}>
       <Controller
         control={control}
-        name="phone"
+        name="mobile"
         rules={{
           required: "signUp.phone_validate",
           pattern: {
@@ -196,16 +243,16 @@ const TextFileds = ({
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              isError={!!errors.phone}
+              isError={!!errors.mobile}
               keyboardType="numeric"
               maxLength={10}
             />
             <View style={{ minHeight: 20 }}>
-              {errors.phone && (
+              {errors.mobile && (
                 <TextComponent
                   style={styles.error}
                   preset="error"
-                  text={errors.phone.message}
+                  text={errors.mobile.message}
                   size="FONT_SMALL_TEXT"
                 />
               )}
@@ -219,8 +266,7 @@ const TextFileds = ({
         rules={{
           required: "signUp.password_validate",
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^\S+$/,
             message: "signUp.password_without_space",
           },
           minLength: {
@@ -298,6 +344,7 @@ const TextFileds = ({
         buttonStyle={{
           borderRadius: SPACING.SPACING_RADIUS,
         }}
+        loading={isPending}
       />
     </View>
   );

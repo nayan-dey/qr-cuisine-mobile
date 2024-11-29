@@ -1,12 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { BackHandler } from "react-native";
-import { DashboardNavigator } from "./DashboardNavigator";
 import { navigationRef } from "./Provider";
 import { useAuth } from "~/context/AuthContext";
 import Loading from "~/screens/Loading/Loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthNavigator } from "./AuthStack";
+import { DashboardNavigatorTabs } from "./DashboardNavigatorTabs";
+import { DashboardNavigator } from "./DashboardNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,11 +35,18 @@ const AppStack = () => {
       }}
     >
       {isLoading ? (
-        <Stack.Screen name="Loading" component={Loading} />
+        <Stack.Screen
+          name="Loading"
+          component={Loading} // Pass component reference
+          initialParams={{ isStatusBarHidden: true }}
+        />
       ) : !isAuthenticated ? (
         <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
       ) : (
-        <Stack.Screen name="Demo" component={DashboardNavigator} />
+        <Stack.Screen
+          name="DashboardNavigator"
+          component={DashboardNavigator}
+        />
       )}
     </Stack.Navigator>
   );
@@ -48,7 +56,7 @@ export const AppNavigator = () => {
   useEffect(() => {
     const onBackPress = () => {
       const currentRoute = navigationRef.current?.getCurrentRoute()?.name;
-      if (currentRoute && "Demo") {
+      if (currentRoute && "DashboardTabs") {
         BackHandler.exitApp();
         return true;
       }

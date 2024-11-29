@@ -154,7 +154,7 @@ export default function OnBoardingScreen({ navigation }) {
 
   const translateX = scrollValue.interpolate({
     inputRange: [0, width, width * 2],
-    outputRange: [0, 13, 27],
+    outputRange: [0, 13, 26],
   });
 
   const scrollToPage = (index) => {
@@ -239,7 +239,7 @@ export default function OnBoardingScreen({ navigation }) {
         <Animated.View
           style={[
             styles.activeIndicator,
-            { position: "absolute", bottom: -0.7, transform: [{ translateX }] },
+            { position: "absolute", bottom: -1, transform: [{ translateX }] },
           ]}
         />
       </View>

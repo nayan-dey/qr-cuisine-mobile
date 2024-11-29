@@ -1,72 +1,45 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { Text, TextStyle, ViewStyle } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Home from "../screens/Home";
-import Profile from "../screens/Profile";
-import { Icon } from "~/componenets/atoms/Icon";
-import { COLORS } from "~/constants/Colors";
+import { DashboardNavigatorTabs } from "./DashboardNavigatorTabs";
+import Explore from "~/screens/Home/Explore";
+import Loading from "~/screens/Loading/Loading";
+import LocationPermissionScreen from "~/screens/Home/Location";
+import NotificationPermissionScreen from "~/screens/Home/Notification";
+import ManualLocation from "~/screens/Home/ManualLocation";
+import useStartPermission from "~/hooks/useStartPermission";
 
-const Tab = createBottomTabNavigator();
-export function DashboardNavigator() {
-  const { bottom } = useSafeAreaInsets();
-  const tabBarActiveTintColor = "#000";
-  const tabBarInactiveTintColor = "#fff";
+const Stack = createNativeStackNavigator();
+
+const DashboardStack = () => {
+  const { initialScreen } = useStartPermission();
+  if (!initialScreen) {
+    return <Loading />;
+  }
+
   return (
-    <Tab.Navigator
+    <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarHideOnKeyboard: true,
-        tabBarStyle: [$tabBar, { bottom }],
-        tabBarActiveTintColor,
-        tabBarInactiveTintColor,
-        tabBarLabelStyle: $tabBarLabel,
-        tabBarItemStyle: $tabBarItem,
-        tabBarShowLabel: false,
+        animationTypeForReplace: "push",
+        animation: "simple_push",
       }}
+      initialRouteName={initialScreen}
     >
-      <Tab.Screen
-        name="Dashboard"
-        component={Home}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="home"
-              color={
-                focused ? COLORS.COLOR_PRIMARY : COLORS.COLOR_TEXT_SECONDARY
-              }
-            />
-          ),
-        }}
+      <Stack.Screen name="DashboardTabs" component={DashboardNavigatorTabs} />
+      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen
+        name="LocationPermission"
+        component={LocationPermissionScreen}
       />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="user"
-              color={
-                focused ? COLORS.COLOR_PRIMARY : COLORS.COLOR_TEXT_SECONDARY
-              }
-            />
-          ),
-        }}
+      <Stack.Screen
+        name="NotificationPermission"
+        component={NotificationPermissionScreen}
       />
-    </Tab.Navigator>
+      <Stack.Screen name="ManualLocation" component={ManualLocation} />
+    </Stack.Navigator>
   );
-}
-
-const $tabBar: ViewStyle = {
-  backgroundColor: COLORS.COLOR_BACKGROUND,
-  borderTopColor: "#666",
 };
 
-const $tabBarItem: ViewStyle = {
-  paddingTop: 15,
-};
-
-const $tabBarLabel: TextStyle = {
-  fontSize: 12,
-  lineHeight: 16,
+export const DashboardNavigator = () => {
+  return <DashboardStack />;
 };

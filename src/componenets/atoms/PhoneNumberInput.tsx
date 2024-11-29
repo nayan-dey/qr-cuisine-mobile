@@ -10,6 +10,7 @@ import { FONT_SIZE } from "~/constants/FontSize";
 import { Dropdown } from "react-native-element-dropdown";
 import { TYPOGRAPHY } from "~/constants/Typography";
 
+const countryCodeFromEnv = process.env.EXPO_PUBLIC_COUNTRY_CODE;
 export interface InputWithLabelProps extends TextInputProps {
   label?: TxKeyPath;
   placeholder: TxKeyPath;
@@ -23,18 +24,18 @@ const PhoneNumberInput: React.FC<InputWithLabelProps> = ({
   ...props
 }) => {
   const main = COLORS.COLOR_SURFACE;
-  const placeholderColor = COLORS.COLOR_TEXT_SECONDARY;
+  const placeholderColor = COLORS.COLOR_TEXT_PLACEHOLDER;
   const border = COLORS.COLOR_ERROR;
 
   // State for selected country code
   const countryCodes = [
-    { label: "+1", value: "+1" },
     { label: "+91", value: "+91" },
+    { label: "+1", value: "+1" },
     { label: "+44", value: "+44" },
   ];
 
   // State for selected country code
-  const [countryCode, setCountryCode] = useState("+1");
+  const [countryCode, setCountryCode] = useState(countryCodeFromEnv);
   return (
     <View style={styles.container}>
       <TextComponent

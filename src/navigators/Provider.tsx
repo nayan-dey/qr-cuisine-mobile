@@ -8,12 +8,16 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AppNavigator } from "./AppNavigator";
 import { useFonts } from "expo-font";
 import AnimatedBootSplash from "../componenets/Splash";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { AuthProvider } from "~/context/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Toast from "react-native-toast-message";
+import toastConfig from "~/utils/toastConfig";
 
 export const navigationRef = createNavigationContainerRef();
 
 export default function Provider() {
+  const queryClient = new QueryClient();
   const [loaded] = useFonts({
     rethink_bold: require("../../assets/fonts/RethinkSans-Bold.ttf"),
     rethink_extrabold: require("../../assets/fonts/RethinkSans-ExtraBold.ttf"),
@@ -26,26 +30,31 @@ export default function Provider() {
 
   if (isSplashVisible && loaded) {
     return (
-      <AnimatedBootSplash
-        onAnimationEnd={() => {
-          setTimeout(() => {
-            setSplashVisible(false);
-          }, 1500);
-        }}
-      />
+      <SafeAreaProvider>
+        <AnimatedBootSplash
+          onAnimationEnd={() => {
+            setTimeout(() => {
+              setSplashVisible(false);
+            }, 1500);
+          }}
+        />
+      </SafeAreaProvider>
     );
   }
   return (
-    <NavigationContainer ref={navigationRef}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <AuthProvider>
-          <KeyboardProvider>
-            {/* <SafeAreaView style={{ flex: 1 }}> */}
-            {!isSplashVisible ? <AppNavigator /> : null}
-            {/* </SafeAreaView> */}
-          </KeyboardProvider>
-        </AuthProvider>
-      </GestureHandlerRootView>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer ref={navigationRef}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AuthProvider>
+            <KeyboardProvider>
+              {/* <SafeAreaView style={{ flex: 1 }}> */}
+              {!isSplashVisible ? <AppNavigator /> : null}
+              {/* </SafeAreaView> */}
+            </KeyboardProvider>
+          </AuthProvider>
+          <Toast config={toastConfig} />
+        </GestureHandlerRootView>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }

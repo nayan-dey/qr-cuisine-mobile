@@ -21,7 +21,7 @@ const InputComponent: React.FC<InputWithLabelProps> = ({
   ...props
 }) => {
   const main = COLORS.COLOR_SURFACE;
-  const placeholderColor = COLORS.COLOR_TEXT_SECONDARY;
+  const placeholderColor = COLORS.COLOR_TEXT_PLACEHOLDER;
   const border = COLORS.COLOR_ERROR;
 
   return (

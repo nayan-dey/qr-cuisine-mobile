@@ -1,6 +1,13 @@
+import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Animated, Image, View } from "react-native";
+import {
+  Animated,
+  Image,
+  Platform,
+  StatusBar as RNStatusBar,
+} from "react-native";
 import BootSplash from "react-native-bootsplash";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = {
   onAnimationEnd: () => void;
@@ -8,20 +15,14 @@ type Props = {
 
 export default function AnimatedBootSplash({ onAnimationEnd }: Props) {
   const [opacity] = useState(() => new Animated.Value(1));
+  const insets = useSafeAreaInsets();
 
   const { container, logo /*, brand */ } = BootSplash.useHideAnimation({
     manifest: require("../../assets/bootsplash/manifest.json"),
-
-    logo: require("../../assets/appicon.png"),
-    // darkLogo: require("../assets/bootsplash/dark-logo.png"),
-    // brand: require("../assets/bootsplash/brand.png"),
-    // darkBrand: require("../assets/bootsplash/dark-brand.png"),
-
+    logo: require("../../assets/bootsplash/logo.png"),
     statusBarTranslucent: true,
-    navigationBarTranslucent: false,
-
+    navigationBarTranslucent: true,
     animate: () => {
-      // Perform animations and call onAnimationEnd
       Animated.timing(opacity, {
         useNativeDriver: true,
         toValue: 0,
@@ -31,10 +32,22 @@ export default function AnimatedBootSplash({ onAnimationEnd }: Props) {
       });
     },
   });
+  const statusBarHeight =
+    Platform.OS === "android" ? RNStatusBar.currentHeight || 0 : insets.top; // Safe area insets on iOS
 
   return (
-    <Animated.View {...container} style={[container.style]}>
-      <Image {...logo} style={{ width: 60, height: 60 }} />
+    <Animated.View
+      {...container}
+      style={[
+        container.style,
+        {
+          bottom: statusBarHeight, // Adjust based on status bar height
+        },
+      ]}
+    >
+      <StatusBar translucent={true} backgroundColor="transparent" />
+      <Image {...logo} style={{ height: 180, width: 180 }} />
+      {/* <Image {...brand} /> */}
     </Animated.View>
   );
 }

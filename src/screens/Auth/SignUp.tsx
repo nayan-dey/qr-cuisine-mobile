@@ -1,10 +1,11 @@
 import {
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { COLORS } from "~/constants/Colors";
 import { useFocusEffect } from "@react-navigation/native";
@@ -21,7 +22,15 @@ import {
 } from "react-native-safe-area-context";
 import { Eye, EyeSlash } from "iconsax-react-native";
 import { Image } from "expo-image";
-import { BottomSheet, BottomSheetRef } from "react-native-sheet";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import { useAuth } from "~/context/AuthContext";
+import * as Crypto from "expo-crypto";
+import { useRegister } from "~/services/auth";
+import Toast from "react-native-toast-message";
+import * as Device from "expo-device";
+
+const countryCode = process.env.EXPO_PUBLIC_COUNTRY_CODE;
+const cryptoSecret = process.env.EXPO_PUBLIC_CRYPTO_SECRET;
 
 export default function SignUp({ navigation }) {
   const bg = COLORS.COLOR_BACKGROUND;
@@ -31,13 +40,18 @@ export default function SignUp({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  const bottomSheet = useRef<BottomSheetRef>(null);
+  const actionSheetRef = useRef<ActionSheetRef>(null);
   const [isSheetOpen, setSheetOpen] = useState(false);
+  const { login } = useAuth();
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView behavior={"padding"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        // behavior={"padding"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "android" ? 0 : 0}
+      >
         <StatusBar
-          backgroundColor={isSheetOpen ? "rgba(0,0,0,0.5)" : bg}
+          backgroundColor={isSheetOpen ? "rgba(0,0,0,0.0)" : bg}
           style={"dark"}
         />
         <ScrollView
@@ -52,7 +66,7 @@ export default function SignUp({ navigation }) {
         >
           <View style={styles.container}>
             <HeadingText />
-            <TextFileds handleFocus={handleFocus} />
+            <TextFileds handleFocus={handleFocus} navigation={navigation} />
             <OrSection />
             <Button
               title="signUp.guest_login"
@@ -67,28 +81,23 @@ export default function SignUp({ navigation }) {
               }}
               onPress={() => {
                 setSheetOpen(true);
-                bottomSheet.current?.show();
+                actionSheetRef.current?.show();
               }}
             />
-            <BottomSheet
-              draggable={true}
-              height={SPACING.SCREEN_HEIGHT / 2}
-              ref={bottomSheet}
-              sheetBackgroundColor={"red"}
-              sheetStyle={{
+            <ActionSheet
+              ref={actionSheetRef}
+              indicatorStyle={{
+                width: 48,
+                height: 4,
+                backgroundColor: COLORS.COLOR_BORDER, // Custom color
+                borderRadius: 3,
+              }}
+              gestureEnabled
+              onClose={() => setSheetOpen(false)}
+              containerStyle={{
                 backgroundColor: COLORS.COLOR_BACKGROUND,
                 borderTopRightRadius: 24,
                 borderTopLeftRadius: 24,
-              }}
-              onCloseFinish={() => {
-                setSheetOpen(false);
-              }}
-              dragIconColor={COLORS.COLOR_BORDER}
-              dragIconStyle={{
-                width: 48,
-                height: 4,
-                borderRadius: SPACING.SPACING_RADIUS,
-                backgroundColor: COLORS.COLOR_BORDER,
               }}
             >
               <View style={styles.modalContent}>
@@ -137,7 +146,7 @@ export default function SignUp({ navigation }) {
                   style={{
                     width: "100%",
                     position: "absolute",
-                    bottom: SPACING.SPACING_LG,
+                    bottom: SPACING.SPACING_XL,
                     alignSelf: "center",
                   }}
                 >
@@ -146,11 +155,18 @@ export default function SignUp({ navigation }) {
                     buttonStyle={{
                       borderRadius: SPACING.SPACING_RADIUS,
                     }}
-                    onPress={() => {}}
+                    onPress={async () => {
+                      const hash = await Crypto.digestStringAsync(
+                        Crypto.CryptoDigestAlgorithm.SHA256,
+                        `${Device.manufacturer}:${Device.modelName}:${cryptoSecret}`,
+                        { encoding: Crypto.CryptoEncoding.HEX }
+                      );
+                      login({ user_id: hash });
+                    }}
                   />
                 </View>
               </View>
-            </BottomSheet>
+            </ActionSheet>
             <SignInContainer navigation={navigation} />
           </View>
         </ScrollView>
@@ -159,28 +175,90 @@ export default function SignUp({ navigation }) {
   );
 }
 
-const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
+const TextFileds = ({
+  handleFocus,
+  navigation,
+}: {
+  handleFocus: () => void;
+  navigation: any;
+}) => {
+  const { login } = useAuth();
+
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const initialValues = {
     name: "",
-    email: "",
+    mobile: "",
     password: "",
   };
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
+  const { mutate: registerUser, isPending } = useRegister(); // Custom hook for registration
+
   useFocusEffect(
     React.useCallback(() => {
       return () => reset(initialValues);
     }, [reset])
   );
+
   const registerSubmit = async (values: typeof initialValues) => {
-    console.log("Values", values);
+    console.log("submit--------->", values);
+    try {
+      if (!isCheckboxChecked) {
+        Toast.show({
+          type: "error",
+          text1: "Please agree to the terms and conditions.",
+        });
+        return;
+      }
+      registerUser(values, {
+        onSuccess: async (data) => {
+          if (data[0]?.user_id === null) {
+            Toast.show({
+              type: "error",
+              text1: "Mobile number is already registered.",
+            });
+            return;
+          } else {
+            const hash = await Crypto.digestStringAsync(
+              Crypto.CryptoDigestAlgorithm.SHA256,
+              `${data[0]?.user_id}:${cryptoSecret}`,
+              { encoding: Crypto.CryptoEncoding.HEX }
+            );
+            login({ user_id: hash });
+            reset(initialValues);
+          }
+        },
+        onError: (error: any) => {
+          alert(`Error: ${error.message}`);
+        },
+      });
+    } catch (err) {
+      console.error("Error in registration:", err);
+    }
   };
+
+  // async function generateHash(data) {
+
+  // const hash = await Crypto.digestStringAsync(
+  //   Crypto.CryptoDigestAlgorithm.SHA256, // Algorithm
+  //   `${data}:${countryCode}`, // Combine data with secret
+  //   { encoding: Crypto.CryptoEncoding.HEX } // Output format
+  // );
+  //   return hash;
+  // }
+
+  // useEffect(async () => {
+  //   const data = process.env.EXPO_PUBLIC_CRYPTO_SECRET;
+  //   const hash = await generateHash(data);
+  //   console.log("hash", hash);
+  // }, []);
 
   return (
     <View style={styles.inputContainer}>
@@ -189,6 +267,10 @@ const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
         name="name"
         rules={{
           required: "signUp.name_validate",
+          pattern: {
+            value: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/,
+            message: "signUp.name_space_validate",
+          },
           minLength: {
             value: 4,
             message: "signUp.name_length_validate",
@@ -220,7 +302,7 @@ const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
       />
       <Controller
         control={control}
-        name="phone"
+        name="mobile"
         rules={{
           required: "signUp.phone_validate",
           pattern: {
@@ -240,16 +322,16 @@ const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              isError={!!errors.phone}
+              isError={!!errors.mobile}
               keyboardType="numeric"
               maxLength={10}
             />
             <View style={{ minHeight: 20 }}>
-              {errors.phone && (
+              {errors.mobile && (
                 <TextComponent
                   style={styles.error}
                   preset="error"
-                  text={errors.phone.message}
+                  text={errors.mobile.message}
                   size="FONT_SMALL_TEXT"
                 />
               )}
@@ -263,8 +345,7 @@ const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
         rules={{
           required: "signUp.password_validate",
           pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            value: /^\S+$/,
             message: "signUp.password_without_space",
           },
           minLength: {
@@ -333,15 +414,28 @@ const TextFileds = ({ handleFocus }: { handleFocus: () => void }) => {
             preset="body"
             style={styles.underlined}
             weight="medium"
+            onPress={() => {
+              navigation.navigate("TermsAndConditions");
+            }}
           />
         </View>
       </View>
       <Button
         title="signUp.sign_up_button"
         onPress={handleSubmit(registerSubmit)}
+        // onPress={() => {
+        //   Toast.show({
+        //     type: "error",
+        //     text1: "Please agree to the terms and conditions.",
+        //   });
+        // }}
+        // onPress={() => {
+        //   login({ token: "qw" });
+        // }}
         buttonStyle={{
           borderRadius: SPACING.SPACING_RADIUS,
         }}
+        loading={isPending}
       />
     </View>
   );

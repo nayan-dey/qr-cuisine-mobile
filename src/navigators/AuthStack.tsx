@@ -11,6 +11,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ForgotPassword from "~/screens/Auth/ForgotPassword";
 import Otp from "~/screens/Auth/Otp";
 import NewPassword from "~/screens/Auth/NewPassword";
+import TermsAndConditions from "~/screens/Auth/TermsAndConditions";
+import OtpClone from "~/screens/Auth/OtpClone";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,8 @@ const AuthStack = () => {
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="Otp" component={Otp} />
       <Stack.Screen name="NewPassword" component={NewPassword} />
+      <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+      <Stack.Screen name="OtpClone" component={OtpClone} />
     </Stack.Navigator>
   );
 };
