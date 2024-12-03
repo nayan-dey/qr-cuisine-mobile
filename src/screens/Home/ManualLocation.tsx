@@ -5,7 +5,6 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
@@ -148,7 +147,7 @@ export default function ManualLocation({ navigation }) {
             onPress={requestLocationPermission}
           />
         </View>
-        {inputText.length > 3 && (
+        {inputText.length > 2 && (
           <>
             <View
               style={{
@@ -176,7 +175,7 @@ export default function ManualLocation({ navigation }) {
             keyExtractor={(item) => item.place_id}
             renderItem={({ item }) => (
               <>
-                {inputText.length > 3 && (
+                {inputText.length > 2 && (
                   <Pressable
                     onPress={() => locationPress(item)}
                     style={[

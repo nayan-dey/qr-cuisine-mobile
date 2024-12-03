@@ -14,14 +14,14 @@
 		96905EF65AED1B983A6B3ABC /* libPods-QRCuisine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-QRCuisine.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		0BF30BC3EFAE407CAEE049C3 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CDFD78828E4E99BC7FEE5E /* noop-file.swift */; };
-		B509D98755D84592B4F9D9F5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACABFA4E23E04697AD23A210 /* BootSplash.storyboard */; };
-		F8B52505C298483DA7E633A4 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9939DB2599054424A2D9CB91 /* Colors.xcassets */; };
-		0601E266A2244654B3B99CF4 /* RethinkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C846642B395743F2BE1B398C /* RethinkSans-Bold.ttf */; };
-		C6001E36532F4C73B2CBEAE9 /* RethinkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 808A2BE9E5C7490A86C61A01 /* RethinkSans-ExtraBold.ttf */; };
-		D652F312AA944EF3A3540BD4 /* RethinkSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71DE0BC752E245669D93E105 /* RethinkSans-Medium.ttf */; };
-		B25B85EAB85B4308A4D50FEC /* RethinkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 040BD6A52A10456EA1CB386F /* RethinkSans-Regular.ttf */; };
-		E8D63B2C8F9D4DE1BE0915FC /* RethinkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 368C6820E80142C3AEB1805F /* RethinkSans-SemiBold.ttf */; };
+		54502F5B0F9E4ED88FAADE11 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62396A6C1E7458EA9DEC2D5 /* noop-file.swift */; };
+		9C04C654C8384B9D9DDEE75E /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A088061AEEE439CA6F69870 /* BootSplash.storyboard */; };
+		ED1A146C1087467B8F5DA969 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F85C197F3484E21AD1E18AE /* Colors.xcassets */; };
+		7443A0E944A345E7B04263FD /* RethinkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE51880C39544B96A5AA1ACF /* RethinkSans-Bold.ttf */; };
+		A80209EBF38F4606BAD80905 /* RethinkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85CE7750F8204C1EBA9CB7E2 /* RethinkSans-ExtraBold.ttf */; };
+		95F33C7A2B3A408DA14F025D /* RethinkSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 166E2D565BA0493E9AEBEE8F /* RethinkSans-Medium.ttf */; };
+		45BC8FBA9F4B47DB90645671 /* RethinkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FDD71DD9D5F477D95939E22 /* RethinkSans-Regular.ttf */; };
+		C9B61E1D7AD54269BF33CF56 /* RethinkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2C9466F752A4967B79B5197 /* RethinkSans-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,15 +38,15 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-QRCuisine/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		92CDFD78828E4E99BC7FEE5E /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "QRCuisine/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		8237DE5029994AA2830BCFC4 /* QRCuisine-Bridging-Header.h */ = {isa = PBXFileReference; name = "QRCuisine-Bridging-Header.h"; path = "QRCuisine/QRCuisine-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
-		ACABFA4E23E04697AD23A210 /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "QRCuisine/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9939DB2599054424A2D9CB91 /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "QRCuisine/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
-		C846642B395743F2BE1B398C /* RethinkSans-Bold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Bold.ttf"; path = "../assets/fonts/RethinkSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		808A2BE9E5C7490A86C61A01 /* RethinkSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-ExtraBold.ttf"; path = "../assets/fonts/RethinkSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		71DE0BC752E245669D93E105 /* RethinkSans-Medium.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Medium.ttf"; path = "../assets/fonts/RethinkSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		040BD6A52A10456EA1CB386F /* RethinkSans-Regular.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Regular.ttf"; path = "../assets/fonts/RethinkSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		368C6820E80142C3AEB1805F /* RethinkSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-SemiBold.ttf"; path = "../assets/fonts/RethinkSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F62396A6C1E7458EA9DEC2D5 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "QRCuisine/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		CA6FB68B93FE4BBA81A5B097 /* QRCuisine-Bridging-Header.h */ = {isa = PBXFileReference; name = "QRCuisine-Bridging-Header.h"; path = "QRCuisine/QRCuisine-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		5A088061AEEE439CA6F69870 /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "QRCuisine/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9F85C197F3484E21AD1E18AE /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "QRCuisine/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
+		DE51880C39544B96A5AA1ACF /* RethinkSans-Bold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Bold.ttf"; path = "../assets/fonts/RethinkSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		85CE7750F8204C1EBA9CB7E2 /* RethinkSans-ExtraBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-ExtraBold.ttf"; path = "../assets/fonts/RethinkSans-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		166E2D565BA0493E9AEBEE8F /* RethinkSans-Medium.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Medium.ttf"; path = "../assets/fonts/RethinkSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8FDD71DD9D5F477D95939E22 /* RethinkSans-Regular.ttf */ = {isa = PBXFileReference; name = "RethinkSans-Regular.ttf"; path = "../assets/fonts/RethinkSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C2C9466F752A4967B79B5197 /* RethinkSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "RethinkSans-SemiBold.ttf"; path = "../assets/fonts/RethinkSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,10 +71,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				92CDFD78828E4E99BC7FEE5E /* noop-file.swift */,
-				8237DE5029994AA2830BCFC4 /* QRCuisine-Bridging-Header.h */,
-				ACABFA4E23E04697AD23A210 /* BootSplash.storyboard */,
-				9939DB2599054424A2D9CB91 /* Colors.xcassets */,
+				F62396A6C1E7458EA9DEC2D5 /* noop-file.swift */,
+				CA6FB68B93FE4BBA81A5B097 /* QRCuisine-Bridging-Header.h */,
+				5A088061AEEE439CA6F69870 /* BootSplash.storyboard */,
+				9F85C197F3484E21AD1E18AE /* Colors.xcassets */,
 			);
 			name = QRCuisine;
 			sourceTree = "<group>";
@@ -104,7 +104,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
-				CE589327DF97425EA533E451 /* Resources */,
+				C1C1810CE3764E71B2DBDA91 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -153,14 +153,14 @@
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
-		CE589327DF97425EA533E451 /* Resources */ = {
+		C1C1810CE3764E71B2DBDA91 /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
-				C846642B395743F2BE1B398C /* RethinkSans-Bold.ttf */,
-				808A2BE9E5C7490A86C61A01 /* RethinkSans-ExtraBold.ttf */,
-				71DE0BC752E245669D93E105 /* RethinkSans-Medium.ttf */,
-				040BD6A52A10456EA1CB386F /* RethinkSans-Regular.ttf */,
-				368C6820E80142C3AEB1805F /* RethinkSans-SemiBold.ttf */,
+				DE51880C39544B96A5AA1ACF /* RethinkSans-Bold.ttf */,
+				85CE7750F8204C1EBA9CB7E2 /* RethinkSans-ExtraBold.ttf */,
+				166E2D565BA0493E9AEBEE8F /* RethinkSans-Medium.ttf */,
+				8FDD71DD9D5F477D95939E22 /* RethinkSans-Regular.ttf */,
+				C2C9466F752A4967B79B5197 /* RethinkSans-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -228,14 +228,14 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				E42C0C3C3EAC4E15A96ECD8E /* QRCuisine-Bridging-Header.h in Resources */,
-				B509D98755D84592B4F9D9F5 /* BootSplash.storyboard in Resources */,
-				F8B52505C298483DA7E633A4 /* Colors.xcassets in Resources */,
-				0601E266A2244654B3B99CF4 /* RethinkSans-Bold.ttf in Resources */,
-				C6001E36532F4C73B2CBEAE9 /* RethinkSans-ExtraBold.ttf in Resources */,
-				D652F312AA944EF3A3540BD4 /* RethinkSans-Medium.ttf in Resources */,
-				B25B85EAB85B4308A4D50FEC /* RethinkSans-Regular.ttf in Resources */,
-				E8D63B2C8F9D4DE1BE0915FC /* RethinkSans-SemiBold.ttf in Resources */,
+				86CBE840155642B6BB1DB03D /* QRCuisine-Bridging-Header.h in Resources */,
+				9C04C654C8384B9D9DDEE75E /* BootSplash.storyboard in Resources */,
+				ED1A146C1087467B8F5DA969 /* Colors.xcassets in Resources */,
+				7443A0E944A345E7B04263FD /* RethinkSans-Bold.ttf in Resources */,
+				A80209EBF38F4606BAD80905 /* RethinkSans-ExtraBold.ttf in Resources */,
+				95F33C7A2B3A408DA14F025D /* RethinkSans-Medium.ttf in Resources */,
+				45BC8FBA9F4B47DB90645671 /* RethinkSans-Regular.ttf in Resources */,
+				C9B61E1D7AD54269BF33CF56 /* RethinkSans-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,7 +311,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				0BF30BC3EFAE407CAEE049C3 /* noop-file.swift in Sources */,
+				54502F5B0F9E4ED88FAADE11 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -35,7 +35,7 @@ export default function Provider() {
           onAnimationEnd={() => {
             setTimeout(() => {
               setSplashVisible(false);
-            }, 1500);
+            }, 250);
           }}
         />
       </SafeAreaProvider>

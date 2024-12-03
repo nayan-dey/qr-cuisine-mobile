@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   KeyboardAvoidingView,
   Pressable,
   ScrollView,
@@ -55,6 +56,20 @@ export default function ForgotPassword({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        navigation.replace("Login");
+        return true; // Prevent the default behavior
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [navigation])
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
@@ -75,7 +90,7 @@ export default function ForgotPassword({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.goBack()}
+                onPress={() => navigation.replace("Login")}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
@@ -195,6 +210,20 @@ const TextFileds = ({
         }}
         loading={isPending}
       />
+
+      {/* <Button
+        titleUntranslated="Send OTP Code"
+        // onPress={handleSubmit(registerSubmit)}
+        onPress={() => {
+          navigation.navigate("Otp", {
+            mobile: "+91 8918335468",
+          });
+        }}
+        buttonStyle={{
+          borderRadius: SPACING.SPACING_RADIUS,
+        }}
+        loading={isPending}
+      /> */}
     </View>
   );
 };

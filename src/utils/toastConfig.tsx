@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    flex: 0.7,
+    flex: 0.8,
   },
   iconStyle: {
     marginRight: SPACING.SPACING_SM,

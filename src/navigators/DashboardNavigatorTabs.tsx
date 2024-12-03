@@ -1,32 +1,41 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Home from "../screens/Home/Home";
-import Profile from "../screens/Profile";
+import Profile from "../screens/Profile/Profile";
 import { Icon } from "~/componenets/atoms/Icon";
 import { COLORS } from "~/constants/Colors";
-import { Home as HomeIcon, LocationDiscover } from "iconsax-react-native";
+import {
+  Home as HomeIcon,
+  LocationDiscover,
+  Reserve,
+  Profile as ProfileIcon,
+} from "iconsax-react-native";
 import { TextComponent } from "~/componenets/atoms/TextComponent";
+import Reserved from "~/screens/Reserved/Reserved";
+import Explore from "~/screens/Explore/Explore";
 
 const Tab = createBottomTabNavigator();
 export function DashboardNavigatorTabs() {
-  const { bottom } = useSafeAreaInsets();
   const tabBarActiveTintColor = "#000";
-  const tabBarInactiveTintColor = "#fff";
+  const tabBarInactiveTintColor = COLORS.COLOR_BACKGROUND;
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        // tabBarStyle: [$tabBar, { bottom }],
         tabBarActiveTintColor,
         tabBarInactiveTintColor,
-        tabBarLabelStyle: $tabBarLabel,
-        tabBarItemStyle: $tabBarItem,
         tabBarShowLabel: false,
         tabBarStyle: {
-          height: 60,
+          height: 80,
+          borderTopRightRadius: 20,
+          borderTopLeftRadius: 20,
+          // borderWidth: StyleSheet.hairlineWidth,
+          overflow: "hidden",
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: COLORS.COLOR_BORDER,
         },
       }}
     >
@@ -63,8 +72,8 @@ export function DashboardNavigatorTabs() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Explore"
+        component={Explore}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
@@ -93,18 +102,72 @@ export function DashboardNavigatorTabs() {
           ),
         }}
       />
+
+      <Tab.Screen
+        name="Reserved"
+        component={Reserved}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Reserve
+                size={24}
+                color={
+                  focused ? COLORS.COLOR_PRIMARY : COLORS.COLOR_TEXT_SECONDARY
+                }
+                variant="Bulk"
+              />
+              <TextComponent
+                style={{
+                  color: focused
+                    ? COLORS.COLOR_PRIMARY
+                    : COLORS.COLOR_TEXT_SECONDARY,
+                }}
+                untranslatedText="Reserved"
+                preset="smallText"
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ProfileIcon
+                size={24}
+                color={
+                  focused ? COLORS.COLOR_PRIMARY : COLORS.COLOR_TEXT_SECONDARY
+                }
+                variant="Bulk"
+              />
+              <TextComponent
+                style={{
+                  color: focused
+                    ? COLORS.COLOR_PRIMARY
+                    : COLORS.COLOR_TEXT_SECONDARY,
+                }}
+                untranslatedText="Profile"
+                preset="smallText"
+              />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
-
-const $tabBar: ViewStyle = {
-  backgroundColor: COLORS.COLOR_OVERLAY,
-  borderTopColor: "#666",
-};
-
-const $tabBarItem: ViewStyle = {
-  paddingTop: 10,
-};
 
 const $tabBarLabel: TextStyle = {
   fontSize: 12,

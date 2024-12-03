@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   KeyboardAvoidingView,
   Pressable,
   ScrollView,
@@ -62,6 +63,20 @@ export default function NewPassword({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        navigation.replace("ForgotPassword");
+        return true; // Prevent the default behavior
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [navigation])
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
@@ -82,7 +97,7 @@ export default function NewPassword({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.navigate("ForgotPassword")}
+                onPress={() => navigation.replace("ForgotPassword")}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
@@ -204,7 +219,7 @@ const TextFileds = ({
         control={control}
         name="confirmPass"
         rules={{
-          required: "reset_password.confirm_password_label",
+          required: "reset_password.confirm_password_required",
           validate: (value) =>
             value === getValues("password") || "reset_password.pass_not_match",
         }}

@@ -10,14 +10,18 @@ import { TYPOGRAPHY } from "~/constants/Typography";
 
 export interface InputWithLabelProps extends TextInputProps {
   label?: TxKeyPath;
-  placeholder: TxKeyPath;
-  isError: boolean;
+  placeholder?: TxKeyPath;
+  isError?: boolean;
+  untanslatedLabel?: string;
+  placeholderUntranslated?: string;
 }
 
 const InputComponent: React.FC<InputWithLabelProps> = ({
   label,
   placeholder,
   isError,
+  untanslatedLabel,
+  placeholderUntranslated,
   ...props
 }) => {
   const main = COLORS.COLOR_SURFACE;
@@ -30,11 +34,14 @@ const InputComponent: React.FC<InputWithLabelProps> = ({
         preset="body"
         style={styles.label}
         text={label}
+        untranslatedText={untanslatedLabel}
         weight="medium"
         color="COLOR_TEXT_SECONDARY"
       />
       <TextInput
-        placeholder={translate(placeholder)}
+        placeholder={
+          placeholder ? translate(placeholder) : placeholderUntranslated
+        }
         style={[
           styles.input,
           {

@@ -268,7 +268,7 @@ const TextFileds = ({
         rules={{
           required: "signUp.name_validate",
           pattern: {
-            value: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/,
+            value: /^[a-zA-Z]+(?: [a-zA-Z]+)* ?$/,
             message: "signUp.name_space_validate",
           },
           minLength: {

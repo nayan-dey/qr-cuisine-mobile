@@ -36,8 +36,11 @@ export const useLocationSuggestions = (debouncedSearchTerm) => {
       }
     };
 
-    if (debouncedSearchTerm) {
+    if (debouncedSearchTerm.length > 2) {
       fetchSuggestions();
+    } else {
+      setSuggestions(null); // Clear suggestions for shorter terms
+      setErrorState(null); // Clear any previous error state
     }
   }, [debouncedSearchTerm]);
 

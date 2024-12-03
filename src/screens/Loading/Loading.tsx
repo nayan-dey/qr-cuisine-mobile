@@ -18,7 +18,7 @@ export default function Loading({ isStatusBarHidden = false }) {
     Platform.OS === "android" ? RNStatusBar.currentHeight || 0 : insets.top; // Safe area insets on iOS
   return (
     <View style={styles.container}>
-      <StatusBar translucent={true} backgroundColor="transparent" />
+      <StatusBar hidden />
       <LottieView
         ref={animationRef}
         source={require("../../../assets/lottie/QR_loop.json")}
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8ff",
   },
   animation: {
-    width: SPACING.SCREEN_WIDTH + 200,
-    height: SPACING.SCREEN_WIDTH + 200,
+    width: SPACING.SCREEN_WIDTH + 300,
+    height: SPACING.SCREEN_WIDTH + 300,
     top: 3,
   },
 });

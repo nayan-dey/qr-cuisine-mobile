@@ -11,6 +11,7 @@
       "bundleIdentifier": "com.erexstudio.qrcuisinemobile"
     },
     "android": {
+      "permissions": ["RECEIVE_SMS", "READ_SMS"],
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/applogo.png",
@@ -26,6 +27,14 @@
     },
 
     "plugins": [
+      [
+        "expo-build-properties"
+        // {
+        //   "android": {
+        //     "minSdkVersion": 34
+        //   }
+        // }
+      ],
       ["./translucent-default-splash-screen-config"],
       ["expo-location"],
       ["@react-native-google-signin/google-signin"],
@@ -62,3 +71,69 @@
     }
   }
 }
+
+// {
+//   "expo": {
+//     "name": "QRCuisine",
+//     "slug": "qr-cuisine-mobile",
+//     "version": "1.0.0",
+//     "orientation": "portrait",
+//     "icon": "./assets/applogo.png",
+//     "userInterfaceStyle": "light",
+//     "ios": {
+//       "supportsTablet": true,
+//       "bundleIdentifier": "com.erexstudio.qrcuisinemobile"
+//     },
+//     "android": {
+//       "permissions": ["RECEIVE_SMS", "READ_SMS"],
+//       "softwareKeyboardLayoutMode": "pan",
+//       "adaptiveIcon": {
+//         "foregroundImage": "./assets/applogo.png",
+//         "backgroundColor": "#666666"
+//       },
+//       "config": {
+//         "googleMaps": {
+//           // "apiKey": "AIzaSyCcvPx5lFY16kjOYYsFCMeXiGLIFumoNHE"
+//           "apiKey": "AIzaSyDbxdM_pA81YqlheJSleL2wG2-5-64j9NQ"
+//         }
+//       },
+//       "package": "com.erexstudio.qrcuisinemobile"
+//     },
+
+//     "plugins": [
+//       ["./translucent-default-splash-screen-config"],
+//       ["expo-location"],
+//       ["@react-native-google-signin/google-signin"],
+//       [
+//         "expo-font",
+//         {
+//           "fonts": [
+//             "./assets/fonts/RethinkSans-Bold.ttf",
+//             "./assets/fonts/RethinkSans-ExtraBold.ttf",
+//             "./assets/fonts/RethinkSans-Medium.ttf",
+//             "./assets/fonts/RethinkSans-Regular.ttf",
+//             "./assets/fonts/RethinkSans-SemiBold.ttf"
+//           ]
+//         }
+//       ],
+//       [
+//         "expo-dev-launcher",
+//         {
+//           "launchMode": "most-recent"
+//         }
+//       ],
+//       [
+//         "react-native-bootsplash",
+//         {
+//           "assetsDir": "assets/bootsplash"
+//         }
+//       ],
+//       "expo-localization"
+//     ],
+//     "extra": {
+//       "eas": {
+//         "projectId": "ed301be1-d711-4c59-9755-8ea6add06f25"
+//       }
+//     }
+//   }
+// }

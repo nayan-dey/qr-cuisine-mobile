@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { DashboardNavigatorTabs } from "./DashboardNavigatorTabs";
-import Explore from "~/screens/Home/Explore";
 import Loading from "~/screens/Loading/Loading";
 import LocationPermissionScreen from "~/screens/Home/Location";
 import NotificationPermissionScreen from "~/screens/Home/Notification";
@@ -26,7 +25,6 @@ const DashboardStack = () => {
       initialRouteName={initialScreen}
     >
       <Stack.Screen name="DashboardTabs" component={DashboardNavigatorTabs} />
-      <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen
         name="LocationPermission"
         component={LocationPermissionScreen}

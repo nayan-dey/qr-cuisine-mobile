@@ -1,10 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { TextComponent } from "~/componenets/atoms/TextComponent";
 
-export default function Explore() {
+export default function Reserved() {
   return (
     <View style={styles.container}>
-      <Text>Explore</Text>
+      <TextComponent
+        preset="title"
+        untranslatedText="Reserved"
+        style={{ paddingBottom: 8 }}
+      />
     </View>
   );
 }
