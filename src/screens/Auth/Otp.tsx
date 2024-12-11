@@ -468,7 +468,7 @@ export default function Otp({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.replace("ForgotPassword")}
+                onPress={() => navigation.goBack()}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
@@ -516,7 +516,7 @@ const TextFileds = ({
   const { mutateAsync: verifyOtp, isPending } = useVarifyOtp();
 
   const registerSubmit = async (values: typeof initialValues) => {
-    // navigation.navigate("NewPassword", { mobile: mobileNumber });
+    // navigation.replace("NewPassword", { mobile: mobileNumber });
 
     // DO THIS ON PRODDDD
 

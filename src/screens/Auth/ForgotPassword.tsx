@@ -56,19 +56,19 @@ export default function ForgotPassword({ navigation }) {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        navigation.replace("Login");
-        return true; // Prevent the default behavior
-      };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const onBackPress = () => {
+  //       navigation.replace("Login");
+  //       return true; // Prevent the default behavior
+  //     };
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+  //     BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
-      return () =>
-        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [navigation])
-  );
+  //     return () =>
+  //       BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+  //   }, [navigation])
+  // );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -90,7 +90,7 @@ export default function ForgotPassword({ navigation }) {
           <View style={styles.container}>
             <Animated.View style={animatedStyle}>
               <Pressable
-                onPress={() => navigation.replace("Login")}
+                onPress={() => navigation.goBack()}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
                 style={styles.topContainer}
